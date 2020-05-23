@@ -14,6 +14,7 @@ This DApp has five components:
 4. **Payout capability:** if the flight is delayed and the passenger has to be paid, it's unwise to send money to passengers, but you'll credit their account and have them withdraw the funds.
 5. **Oracles:** used to get the flight information
 
+A map of the on and off-chain DApp architecture can be be [found](./images/Flight-Surety-Architecture.png) here on in the following image:
 ![image](./images/Flight-Surety-Architecture.png)
 
 
