@@ -1,6 +1,21 @@
-# FlightSurety
+# FlightSurety: an Oracle and Smart Contract-Powered Decentralized Application
 
-FlightSurety is a sample application project for Udacity's Blockchain course.
+## **Definition:** 
+FlightSurety is a decentralized application on flight delay insurance for passengers. It's managed as a collaboration between multiple airlines, giving passenters the ability to purcahse insurance prior to a flight. If the flight is delayeddue to the fault of the airline, then the passengers are paid 1.5X the amount they paid for the insurance. Finally, oracles will be used as a mechanism for providing flight status information into the contract.
+
+To note, in a real-world example, the amount that would be paid back to the passengers would most likely be computed with advanced algorithms and methods. The 1.5X figure was an arbitrary one used for examplary purposes and for sake of simplicity.
+
+## Architecture Overview:
+
+This DApp has five components: 
+1. **Business applicaton:** the overall delay insurance concept 
+2. **Multi-party:** the collaboration between multiple airlines
+3. **Payable keyword:** creating transactions where users can pay using the payable keyword
+4. **Payout capability:** if the flight is delayed and the passenger has to be paid, it's unwise to send money to passengers, but you'll credit their account and have them withdraw the funds.
+5. **Oracles:** used to get the flight information
+
+![image](./images/Flight-Surety-Architecture.png)
+
 
 ## Install
 
