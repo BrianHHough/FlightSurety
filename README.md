@@ -4,6 +4,14 @@
 FlightSurety is a decentralized application on flight delay insurance for passengers. It's managed as a collaboration between multiple airlines, giving passenters the ability to purcahse insurance prior to a flight. If the flight is delayeddue to the fault of the airline, then the passengers are paid 1.5X the amount they paid for the insurance. Finally, oracles will be used as a mechanism for providing flight status information into the contract.
 
 To note, in a real-world example, the amount that would be paid back to the passengers would most likely be computed with advanced algorithms and methods. The 1.5X figure was an arbitrary one used for examplary purposes and for sake of simplicity.
+
+## Programming Libraries Used:
+- **Truffle v5.1.14-nodeLTS.0 (core: 5.1.13):** used in project to deploy, test, and deploy DApp's smart contracts.
+- **Solidity v0.5.16 (solc-js):** an object-oriented, high-level langauge for writing, designing, and implementing smart contracts.
+- **OpenZeppelin v2.1.2:** minimizes risk by using battle-tested libraries of smart contracts.
+- **Node v12.16.2:** used for easily building fast and scalable network applications - integral for deploying UI to the browswer.
+- **Web3.js v1.2.1:** used to allow the DApp to interact with a local/remote Ethereum node with an HTTP, HTTPS, or IPC connection.
+
  
 
 ## Install
@@ -54,6 +62,10 @@ Deploy the contents of the ./dapp folder
 * [Solidity Language Reference](http://solidity.readthedocs.io/en/v0.4.24/)
 * [Ethereum Blockchain Explorer](https://etherscan.io/)
 * [Web3Js Reference](https://github.com/ethereum/wiki/wiki/JavaScript-API)
+* [Ethereumdev.io: Using Safe Math library to prevent from overflows](https://ethereumdev.io/using-safe-math-library-to-prevent-from-overflows/) - learning about SafeMath
+* [OpenZeppelin-contracts GitHub issue on SafeMath not providing detection of losing precision by division](https://github.com/OpenZeppelin/openzeppelin-contracts/issues/1759)
+* [Coursetro: Solidity Mappings & Structs Tutorial](https://coursetro.com/posts/code/102/Solidity-Mappings-&-Structs-Tutorial#)
+
 
 ___
 
@@ -117,7 +129,7 @@ There are five main requirements for the project:
 There are two smart contracts used in FlightSurety for the App and for the Data.
 
 ## **[FlightSuretyApp.sol](./contracts/FlightSuretyApp.sol)**
-- this has the app/DApp logic
+- this has the app/DApp logic and oracles code
 - List of the 6 flight status codes:
     - `Unknown`
     - `On_Time`

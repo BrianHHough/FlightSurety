@@ -1,4 +1,5 @@
-pragma solidity ^0.4.25;
+// changed the ^ to be >= to be less restrictive and allow other versions of solidity
+pragma solidity >=0.4.25;
 
 contract Migrations {
   address public owner;

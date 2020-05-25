@@ -1,4 +1,5 @@
-pragma solidity ^0.4.25;
+// changed the ^ to be >= to be less restrictive and allow other versions of solidity
+pragma solidity >=0.4.25;
 
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
@@ -102,6 +103,7 @@ contract FlightSuretyData {
                             (   
                             )
                             external
+                            // DON'T USE PURE b/c registering an airline would change state, so pure wouldn't work here
                             pure
     {
     }
