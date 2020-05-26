@@ -141,7 +141,7 @@ returns (AirlineState) {
 }
 
 // 2. createAirline() = this is to create the airline for the potential insurance pool
-function createAirline(address airlineAddress, uint8 state, string name) external 
+function createAirline(address airlineAddress, uint8 state, string calldata name) external
 requireCallerAuthorized {
     airlines[airlineAddress] = Airline(airlineAddress, AirlineState(state), name, 0);
 }
@@ -193,7 +193,7 @@ struct Insurance {
 mapping(address => mapping(string => Insurance)) private passengerInsurances;
 mapping(address => uint256) private passengerBalances;
 
-function getInsurance(address passenger, string flight)
+function getInsurance(address passenger, string calldata flight)
     external
     view
     requireCallerAuthorized
@@ -206,14 +206,14 @@ function getInsurance(address passenger, string flight)
             state = passengerInsurances[passenger][flight].state;
         }
 
-function createInsurance(address passenger, string flight, uint256 amount, uint256 payoutAmount)
+function createInsurance(address passenger, string calldata flight, uint256 amount, uint256 payoutAmount)
 external
 requireCallerAuthorized {
     require(passengerInsurances[passenger][flight].amount != amount, "This amount of insurance is already in existence");
     passengerInsurances[passenger][flight] = Insurance(flight, amount, payoutAmount, InsuranceState.Bought);
 }
 
-function claimInsurance(address passenger, string flight)
+function claimInsurance(address passenger, string calldata flight)
 external
 requireCallerAuthorized {
     require(passengerInsurances[passenger][flight].state == InsuranceState.Bought, "This amount of insurance has already been claimed!");

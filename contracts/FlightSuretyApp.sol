@@ -25,7 +25,7 @@ contract FlightSuretyApp {
     bool private operational = true;
 
     // data is persisted
-    FlightSuretyData dataContract;
+    FlightSuretyData flightSuretyData;
 
     address flightSuretyDataContractAddress;
 
@@ -41,7 +41,7 @@ contract FlightSuretyApp {
     *      This is used on all state changing functions to pause the contract in
     *      the event there is an issue that needs to be fixed
     */
-    modifier requireIsOperational() 
+    modifier requireIsOperational()
     {
          // Modify to call data contract's status
         require(operational, "Contract is currently not operational");
@@ -59,13 +59,13 @@ contract FlightSuretyApp {
 
     modifier onlyRegisteredAirlines()
     {
-        require(FlightSuretyData.getAirlineState(msg.sender) == 1, "Only the registered airlines are allowed to be part of the pool!");
+        require(flightSuretyData.getAirlineState(msg.sender) == 1, "Only registered allowed");
         _;
     }
 
     modifier onlyPaidAirlines()
     {
-        require(FlightSuretyData.getAirlineState(msg.sender) == 2, "Only the airlines that have paid are allowed to be part of the pool!");
+        require(flightSuretyData.getAirlineState(msg.sender) == 2, "Only the airlines that have paid are allowed to be part of the pool!");
         _;
     }
 
@@ -85,7 +85,7 @@ contract FlightSuretyApp {
 
         flightSuretyDataContractAddress = dataContractAddress;
         // establish variable
-        FlightSuretyData = FlightSuretyData(flightSuretyDataContractAddress);
+        flightSuretyData = FlightSuretyData(flightSuretyDataContractAddress);
 
 
         // First flights -- start
@@ -165,43 +165,43 @@ contract FlightSuretyApp {
     // NOTE: added calldata, before it was just (string airlineName)
     function applyForAirlineRegistration(string calldata airlineName) external
     {
-        FlightSuretyData.createAirline(msg.sender, 0, airlineName);
+        flightSuretyData.createAirline(msg.sender, 0, airlineName);
         emit AirlineApplied(msg.sender);
     }
 
     // 2. approveAirlineRegistration() = approve the airline's registrations - this is a boolean: it either is approved or rejected
     function approveAirlineRegistration(address airline) external onlyPaidAirlines {
-        require(FlightSuretyData.getAirlineState(airline) == 0, "Unfortunately, this airline hasn't applied for approval just yet.");
+        require(flightSuretyData.getAirlineState(airline) == 0, "Unfortunately, this airline hasn't applied for approval just yet.");
 
         // Make this a boolean function where something is either true or false:
         bool approved = false;
-        uint256 totalPaidAirlines = FlightSuretyData.getTotalPaidAirlines();
+        uint256 totalPaidAirlines = flightSuretyData.getTotalPaidAirlines();
 
         // Make the total paid by the airlines less than the amount required for voting consensus (so it's not more than potential total amount)
         if (totalPaidAirlines < NO_AIRLINES_REQUIRED_FOR_CONSENSUS_VOTING) {
             approved = true;
         } else {
             // approval count must be ONLY the approved airline registrations
-            uint8 approvalCount = FlightSuretyData.approveAirlineRegistration(airline, msg.sender);
+            uint8 approvalCount = flightSuretyData.approveAirlineRegistration(airline, msg.sender);
             uint256 approvalsRequired = totalPaidAirlines / 2;
             if (approvalCount >= approvalsRequired) approved = true;
         }
 
         // If airline paid, then acknowledge the airline as registered
         if (approved) {
-            FlightSuretyData.updateAirlineState(airline, 1);
+            flightSuretyData.updateAirlineState(airline, 1);
             emit AirlineRegistered(airline);
         }
     }
     
     // 3. payAirlineDues() = this is a payable function where only the registered airlines makes a payment with onlyRegisteredAirlines
-    function payAirlineDues() external payable onlyRegisteredAirlines {
+    function payAirlineDues() external { address payable onlyRegisteredAirlines; 
         require(msg.value == 10 ether, "The required payment of 10 ethere is due.");
         flightSuretyDataContractAddress.transfer(msg.value);
         FlightSuretyData.updateAirlinesState(msg.sender, 2);
         emit AirlinePaid(msg.sender);
     }
-
+    }
 
  /********************************************************************************************/
  /*                          PASSENGER INSURANCE CODES / FUNCTIONS                           */
@@ -438,8 +438,9 @@ function withdrawBalance() external
         });
     }
 
+    // NOTE: added memory after uint8[3] b/c "Error: Data location must be "memory" for return parameter in function, but none was given."
     function getMyIndexes() external view
-    returns(uint8[3])
+    returns(uint8[3] memory)
     {
         require(oracles[msg.sender].isRegistered, "Not registered as an oracle");
 
@@ -499,8 +500,9 @@ function withdrawBalance() external
     }
 
     // Returns array of three non-duplicating integers from 0-9
+    // NOTE: added memory after uint8[3] b/c "Error: Data location must be "storage" or "memory" for return parameter in function, but none was given."
     function generateIndexes(address account)
-    internal returns(uint8[3])
+    internal returns(uint8[3] memory)
     {
         uint8[3] memory indexes;
         indexes[0] = getRandomIndex(account);
@@ -541,8 +543,8 @@ function withdrawBalance() external
 /********************************************************************************************/
 
 // Note: added in "external" to the external view components below to avoid error: "security/enforce-explicit-visibility: No visibility specified explicitly for getAirlineState function."
-contract FlightSuretyData {
 
+contract FlightSuretyData {
     function getAirlineState(address airline) public
     returns(uint)
     {
