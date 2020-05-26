@@ -162,7 +162,8 @@ contract FlightSuretyApp {
     3. payAirlineDues() = this is a payable function where only the registered airlines makes a payment */
 
     // 1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
-    function applyForAirlineRegistration(string airlineName) external
+    // NOTE: added calldata, before it was just (string airlineName)
+    function applyForAirlineRegistration(string calldata airlineName) external
     {
         FlightSuretyData.createAirline(msg.sender, 0, airlineName);
         emit AirlineApplied(msg.sender);
@@ -223,7 +224,7 @@ event passengerInsuranceBought(address passenger, bytes32 flightKey);
 
 // 1. purchaseInsurance() = allows passengers to buy insurance ahead of the flight as payable function
 // NOTE: this is a external payable function
-function purchaseInsurance(address airline, string flight, uint256 timestamp) external payable
+function purchaseInsurance(address airline, string calldata flight, uint256 timestamp) external payable
 {
     bytes32 flightKey = getFlightKey(airline, flight, timestamp);
 
@@ -242,14 +243,14 @@ function purchaseInsurance(address airline, string flight, uint256 timestamp) ex
 
 // 2. getInsurance() = allows passenger to receive insurance after buying it
 // NOTE: this is an external view function
-function getInsurance(string flight) external view
+function getInsurance(string calldata flight) external view
 returns (uint256 amount, uint256 payoutAmount, uint256 state)
 {
     return FlightSuretyData.getInsurance(msg.sender, flight);
 }
 
 // 3. claimInsurance() = allows passenger to claim the right to the insurance they got
-function claimInsurance(address airline, string flight, uint256 timestamp) external
+function claimInsurance(address airline, string calldata flight, uint256 timestamp) external
 {
     bytes32 flightKey = getFlightKey(airline, flight, timestamp);
     require(flights[flightKey].statusCode == STATUS_CODE_LATE_AIRLINE, "This flight was not delayed and insurance will not be paid out");
@@ -320,7 +321,7 @@ function withdrawBalance() external
 
     function getFlight(uint256 index) external view returns(
         address airline,
-        string flight,
+        string memory flight,
         uint256 timestamp,
         uint8 statuscode){
             airline = flights[ flightsKeyList[index] ].airline;
@@ -336,7 +337,7 @@ function withdrawBalance() external
 
     function registerFlight(
         uint8 status,
-        string flight)
+        string calldata flight)
     external onlyPaidAirlines{
         bytes32 flightKey = getFlightKey(msg.sender, flight, now);
 
@@ -364,7 +365,7 @@ function withdrawBalance() external
     // Generate a request for oracles to fetch flight information
     function fetchFlightStatus(
         address airline, 
-        string flight, 
+        string calldata flight, 
         uint256 timestamp)
     external{
         uint8 index = getRandomIndex(msg.sender);
@@ -453,7 +454,7 @@ function withdrawBalance() external
     function submitOracleResponse(
         uint8 index,
         address airline,
-        string flight,
+        string calldata flight,
         uint256 timestamp,
         uint8 statusCode
     )
@@ -487,7 +488,7 @@ function withdrawBalance() external
 
     function getFlightKey(
         address airline,
-        string flight,
+        string memory flight,
         uint256 timestamp
     )
     pure
@@ -542,34 +543,34 @@ function withdrawBalance() external
 // Note: added in "external" to the external view components below to avoid error: "security/enforce-explicit-visibility: No visibility specified explicitly for getAirlineState function."
 contract FlightSuretyData {
 
-    function getAirlineState(address airline) view
+    function getAirlineState(address airline) public
     returns(uint)
     {
         return 1;
     }
 
-    function createAirline(address airlineAddress, uint8 state, string name) view
+    function createAirline(address airlineAddress, uint8 state, string memory name) public
     {}
 
-    function updateAirlineState(address airlineAddress, uint8 state) view
+    function updateAirlineState(address airlineAddress, uint8 state) public
     {}
 
-    function getTotalPaidAirlines() view
+    function getTotalPaidAirlines() public
     returns (uint)
     {
         return 1;
     }
 
-    function approveAirlineRegistration(address airline, address approver) view
+    function approveAirlineRegistration(address airline, address approver) public
     returns (uint8)
     {
         return 1;
     }
 
-    function createInsurance(address passenger, string flight, uint256 amount, uint256 payoutAmount) view
+    function createInsurance(address passenger, string memory flight, uint256 amount, uint256 payoutAmount) public
     {}
 
-    function getInsurance(address passenger, string flight) view
+    function getInsurance(address passenger, string memory flight) public
     returns (uint256 amount, uint256 payoutAmount, uint256 state)
     {
         amount = 1;
@@ -577,16 +578,16 @@ contract FlightSuretyData {
         state = 1;
     }
 
-    function claimInsurance(address passenger, string flight) view
+    function claimInsurance(address passenger, string memory flight) public
     {}
 
-    function getPassengerBalance(address passenger) view
+    function getPassengerBalance(address passenger) public
     returns (uint256)
     {
         return 1;
     }
 
-    function payPassenger(address passenger) view
+    function payPassenger(address passenger) public
     {}
 
 }

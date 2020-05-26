@@ -152,3 +152,5 @@ There are two smart contracts used in FlightSurety for the App and for the Data.
     - `fund`
     - `getFlightKey`
 
+## **[SafeMath.sol contract](./node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol)**
+- Needed to update the `pragma solidity ^0.4.24;` file to `>=0.4.25`
