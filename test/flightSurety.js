@@ -1,26 +1,60 @@
+// Updated "var" to "const"
+const Test = require('../config/testConfig.js');
+// add in truffle assertion about requiring truffle here:
+const truffleAssert = require('truffle-assertions');
+const BigNumber = require('bignumber.js');
 
-var Test = require('../config/testConfig.js');
-var BigNumber = require('bignumber.js');
+// establish a series of let components leading up to testing the contracts to establish the variables and items to analyze:
 
-contract('Flight Surety Tests', async (accounts) => {
+// let's for accounts/to initialize
+let config; // changed from var config
+let accounts;
+// let's for airlines
+let firstAirline; // 1st airline
+let secondAirline; // 2nd airline
+let thirdAirline; // 3rd airline
+let fourthAirline; // 4th airline
+let fifthAirline; // 5th airline
+// one final let for the passenger
+let passenger;
 
-  var config;
-  before('setup contract', async () => {
+contract('Flight Surety Tests', async (acc) => {
+    accounts = acc;
+        firstAirline = accounts[0]; 
+        secondAirline = accounts[1]; 
+        thirdAirline = accounts[2]; 
+        fourthAirline = accounts[3]; 
+        fifthAirline = accounts[4];
+        passenger = accounts[5];
+    });
+
+// removed before('setup contract', async...)
+  before(async () => {
     config = await Test.Config(accounts);
-    await config.flightSuretyData.authorizeCaller(config.flightSuretyApp.address);
+    await config.flightSuretyData.setCallerAuthorizationStatus(config.flightSuretyApp.address, true);
   });
 
   /****************************************************************************************/
-  /* Operations and Settings                                                              */
+  /*                                 Operations and Settings                              */
   /****************************************************************************************/
 
-  it(`(multiparty) has correct initial isOperational() value`, async function () {
+it(`(multiparty) has correct initial isOperational() value`, async function () {
 
     // Get operating status
-    let status = await config.flightSuretyData.isOperational.call();
-    assert.equal(status, true, "Incorrect initial operating status value");
-
+    assert.equal(await config.flightSuretyData.isOperational(), true, "This is an incorrect initial operating status value for smart contract: flightSuretyData.sol!");
+    assert.equal(await config.flightSuretyApp.isOperational(), true, "This is an incorrect initial operating status value for smart contract: flightSuretyApp.sol!");
   });
+
+
+  it('flightSurretyApp is authorized to make calls to flightSuretyData', async function () {
+      const status = await config.flightSuretyData.getCallerAuthorizations(config.flightSuretyApp.address);
+      assert.equal(status, true, "flightSuretyApp isn't authorized to function like this.");
+  });
+
+/****************************************************************************************/
+/*                                Airline Functions Tests                               */
+/****************************************************************************************/
+
 
   it(`(multiparty) can block access to setOperatingStatus() for non-Contract Owner account`, async function () {
 

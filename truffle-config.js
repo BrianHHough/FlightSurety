@@ -49,7 +49,7 @@ module.exports = {
       port: 9545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
       accounts: 50           // Establish 50 accounts in the dev network as recommended
-    // },
+    },
 
     // Another network with more advanced options...
     // advanced: {

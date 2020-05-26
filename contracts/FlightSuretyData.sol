@@ -1,4 +1,4 @@
-// changed the ^ to be >= to be less restrictive and allow other versions of solidity
+// changed the ^ to be >= to be less restrictive and allow other versions of solidity >=0.4.25
 pragma solidity >=0.4.25;
 
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -18,49 +18,7 @@ contract FlightSuretyData {
     mapping(address => bool) private authorizedCallers;
 
 
-    /********************************************************************************************/
-    /*                  CONSTRUCTORS; FUNCTION MODIFIERS; UTILITY FUNCTIONS                     */
-    /********************************************************************************************/
-
-
-    /**
-    * @dev Constructor
-    *      The deploying account becomes contractOwner
-    */
-    constructor() 
-    public{
-        contractOwner = msg.sender;
-        // contractOwner is a part of the airline owner, whether the airline paid, and starting from 0
-        airlines[contractOwner] = Airline(contractOwner, AirlineState.Paid, "First Airline", 0);
-        // 
-        totalPaidAirlines++;
-    }
-
-    function()
-    external payable {
-    }
-
-    function isOperational() public view
-    returns (bool) {
-        return operational;
-    }
-
-    function setOperatingStatus(bool mode) external requireContractOwner {
-        operational = mode;
-    }
-
-    function setCallerAuthorizationStatus(address caller, bool status) external requireContractOwner
-    returns (bool) {
-        authorizedCallers[caller] = status;
-        return authorizedCallers[caller];
-    }
-
-    function getCallerAuthorizationStatus(address caller) public view requireContractOwner
-    returns (bool){
-        return authorizedCallers[caller];
-    }
-
-    /********************************************************************************************/
+/********************************************************************************************/
     /*                                       FUNCTION MODIFIERS                                 */
     /********************************************************************************************/
 
@@ -92,6 +50,51 @@ contract FlightSuretyData {
         require(authorizedCallers[msg.sender] || (msg.sender == contractOwner), "This caller is unfortunately not authorized for this.");
         _;
     }
+
+    /********************************************************************************************/
+    /*                  CONSTRUCTORS; FUNCTION MODIFIERS; UTILITY FUNCTIONS                     */
+    /********************************************************************************************/
+
+
+    /**
+    * @dev Constructor
+    *      The deploying account becomes contractOwner
+    */
+    constructor() 
+    public {
+        contractOwner = msg.sender;
+        // contractOwner is a part of the airline owner, whether the airline paid, and starting from 0
+        airlines[contractOwner] = Airline(contractOwner, AirlineState.Paid, "First Airline", 0);
+        // 
+        totalPaidAirlines++;
+    }
+
+    function()
+    external payable 
+    {
+    }
+
+    function isOperational() public view
+    returns (bool) {
+        return operational;
+    }
+
+    function setOperatingStatus(bool mode) external requireContractOwner {
+        operational = mode;
+    }
+
+    function setCallerAuthorizationStatus(address caller, bool status) external requireContractOwner
+    returns (bool) {
+        authorizedCallers[caller] = status;
+        return authorizedCallers[caller];
+    }
+
+    function getCallerAuthorizationStatus(address caller) public view requireContractOwner
+    returns (bool) {
+        return authorizedCallers[caller];
+    }
+
+    
 
 /********************************************************************************************/
 /*                                  AIRLINE UTILITY FUNCTIONS                                  */
@@ -215,6 +218,7 @@ external
 requireCallerAuthorized {
     require(passengerInsurances[passenger][flight].state == InsuranceState.Bought, "This amount of insurance has already been claimed!");
     passengerInsurances[passenger][flight].state = InsuranceState.Claimed;
+    
     passengerBalances[passenger] = passengerBalances[passenger] + passengerInsurances[passenger][flight].payoutAmount;
 }
 
@@ -229,8 +233,10 @@ returns (uint256) {
 function payPassenger(address passenger)
 external
 requireCallerAuthorized {
-    require(passengerBalancesp[passenger] > 0, "This passenger unfortunately does not have enough funds to withdraw that amount to their digital wallet.");
+    require(passengerBalances[passenger] > 0, "This passenger unfortunately does not have enough funds to withdraw that amount to their digital wallet.");
     passengerBalances[passenger] = 0;
     passenger.transfer(passengerBalances[passenger]);
+}
+
 }
 
