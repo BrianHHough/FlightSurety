@@ -207,11 +207,12 @@ contract FlightSuretyApp {
  /*                          PASSENGER INSURANCE CODES / FUNCTIONS                           */
  /********************************************************************************************/
 
-uint public constant MAX_INSURANCE_AMOUNT = 1 ether;
+// uint8 private nonce = 0;
+// public constant MAX_INSURANCE_AMOUNT = 1 ether; 
 
-uint public constant INSURANCE_DIVIDER = 2;
+// uint256 public constant INSURANCE_DIVIDER = 2;
 
-event passengerInsuranceBought(address passenger, bytes32 flightKey);
+// event passengerInsuranceBought(address passenger, bytes32 flightKey);
 
 /* CREATE A SET OF FIVE FUNCTIONS:
 1. purchaseInsurance() = allows passengers to buy insurance ahead of the flight as payable function
