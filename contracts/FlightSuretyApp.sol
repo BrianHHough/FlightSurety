@@ -56,14 +56,15 @@ contract FlightSuretyApp {
         require(msg.sender == contractOwner, "Caller is not contract owner");
         _;
     }
-    /*
-    modifier onlyRegisteredAirlines()
+    
+    // NOTE: made this requireOnlyRegisteredAirlines like IsOperational
+    modifier requireOnlyRegisteredAirlines()
     {
         require(flightSuretyData.getAirlineState(msg.sender) == 1, "Only registered allowed");
         _;
     }
-    */
     
+
     modifier onlyPaidAirlines()
     {
         require(flightSuretyData.getAirlineState(msg.sender) == 2, "Only the airlines that have paid are allowed to be part of the pool!");
@@ -297,14 +298,16 @@ function withdrawBalance() external
         uint8 statusCode;
         uint256 updatedTimestamp;
         address airline;
+        // NOTE: added in string flight
+        string flight;
     }
 
     // Define mapping of "Flight"
     mapping(bytes32 => Flight) private flights;
     bytes32[] private flightsKeyList;
 
-
-    event FlightStatusProcessed(address airline, string flight, uint8 statusCode);
+    // NOTE: Added in updated timestamp
+    event FlightStatusProcessed(address airline, string flight, uint256 updatedTimestamp, uint8 statusCode);
 
  /**
     * @dev Add an airline to the registration queue
