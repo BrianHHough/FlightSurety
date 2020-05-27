@@ -56,13 +56,14 @@ contract FlightSuretyApp {
         require(msg.sender == contractOwner, "Caller is not contract owner");
         _;
     }
-
+    /*
     modifier onlyRegisteredAirlines()
     {
         require(flightSuretyData.getAirlineState(msg.sender) == 1, "Only registered allowed");
         _;
     }
-
+    */
+    
     modifier onlyPaidAirlines()
     {
         require(flightSuretyData.getAirlineState(msg.sender) == 2, "Only the airlines that have paid are allowed to be part of the pool!");
