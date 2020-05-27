@@ -206,10 +206,9 @@ contract FlightSuretyApp {
  /********************************************************************************************/
  /*                          PASSENGER INSURANCE CODES / FUNCTIONS                           */
  /********************************************************************************************/
-
+uint8 private constant MAX_INSURANCE_AMOUNT;
+uint8 private constant INSURANCE_DIVIDER;
 // uint8 private nonce = 0;
-// public constant MAX_INSURANCE_AMOUNT = 1 ether; 
-
 // uint256 public constant INSURANCE_DIVIDER = 2;
 
 // event passengerInsuranceBought(address passenger, bytes32 flightKey);
