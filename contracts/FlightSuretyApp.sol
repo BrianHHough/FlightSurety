@@ -152,7 +152,7 @@ contract FlightSuretyApp {
     1. Applied
     2. Registered
     3. Paid */
-    event AirlineApplied(address airlien);
+    event AirlineApplied(address airline);
     event AirlineRegistered(address airline);
     event AirlinePaid(address airline);
 
@@ -163,8 +163,7 @@ contract FlightSuretyApp {
 
     // 1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
     // NOTE: added calldata, before it was just (string airlineName)
-    // NOTE: removed calldata
-    function applyForAirlineRegistration(string airlineName) external
+    function applyForAirlineRegistration(string calldata airlineName) external
     {
         flightSuretyData.createAirline(msg.sender, 0, airlineName);
         emit AirlineApplied(msg.sender);
@@ -196,13 +195,13 @@ contract FlightSuretyApp {
     }
     
     // 3. payAirlineDues() = this is a payable function where only the registered airlines makes a payment with onlyRegisteredAirlines
-    function payAirlineDues() external payable { address onlyRegisteredAirlines; 
+    function payAirlineDues() external payable { address onlyRegisteredAirlines;
         require(msg.value == 10 ether, "The required payment of 10 ethere is due.");
         flightSuretyDataContractAddress.transfer(msg.value);
         FlightSuretyData.updateAirlinesState(msg.sender, 2);
         emit AirlinePaid(msg.sender);
     }
-    }
+
 
  /********************************************************************************************/
  /*                          PASSENGER INSURANCE CODES / FUNCTIONS                           */
