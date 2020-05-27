@@ -200,7 +200,7 @@ contract FlightSuretyApp {
     function payAirlineDues() external payable { address onlyRegisteredAirlines;
         require(msg.value == 10 ether, "The required payment of 10 ethere is due.");
         flightSuretyDataContractAddress.transfer(msg.value);
-        FlightSuretyData.updateAirlinesState(msg.sender, 2);
+        FlightSuretyData.updateAirlineState(msg.sender, 2);
         emit AirlinePaid(msg.sender);
     }
 

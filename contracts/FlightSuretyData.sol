@@ -153,6 +153,13 @@ requireCallerAuthorized {
     if (state == 2) totalPaidAirlines++;
 }
 
+// NOTE: added to connect with FlightSuretyApp.sol
+function updateAirlineState(address airlineAddress, uint8 state) external view
+requireCallerAuthorized
+returns (uint8) {
+    return AirlineState;
+}
+
 // 4. getTotalPaidAirlines() = this is to establish which of the airlines paid and are in the pool
 function getTotalPaidAirlines() external view
 requireCallerAuthorized
@@ -169,6 +176,7 @@ returns (uint8) {
 
     return airlines[airline].approvalCount;
 }
+
 
 
 /********************************************************************************************/
