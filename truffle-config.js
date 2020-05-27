@@ -22,7 +22,8 @@
 const HDWalletProvider = require("truffle-hdwallet-provider");
 // const infuraKey = "fj4jll3k.....";
 //
-// const fs = require('fs');
+
+const fs = require('fs');
 const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 
@@ -45,8 +46,11 @@ module.exports = {
     // options below to some value.
     //
     development: {
-      host: "127.0.0.1",     // Localhost (default: none)
-      port: 9545,            // Standard Ethereum port (default: none)
+      provider: function() {
+        return new HDWalletProvider(mnemonic, "http://127.0.0.1:8545/", 0, 50);
+      },
+      // host: "127.0.0.1",     // Localhost (default: none)
+      // port: 9545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
       accounts: 50           // Establish 50 accounts in the dev network as recommended
     },
