@@ -57,8 +57,8 @@ contract FlightSuretyApp {
         _;
     }
 
-    // NOTE: made this requireOnlyRegisteredAirlines like IsOperational
-    modifier requireOnlyRegisteredAirlines()
+    // NOTE: made this requireOnlyRegisteredAirlines like IsOperational /// NOTE: updated to the below:
+    modifier onlyRegisteredAirlines()
     {
         require(flightSuretyData.getAirlineState(msg.sender) == 1, "Only registered allowed");
         _;
@@ -107,7 +107,7 @@ contract FlightSuretyApp {
 
         bytes32 flightKey2 = getFlightKey(
             contractOwner,
-            "flight2",
+            "FLIGHT2",
             now + 1 days
         );
             flights[flightKey2] = Flight(
@@ -165,7 +165,7 @@ contract FlightSuretyApp {
 
     // 1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
     // NOTE: added calldata, before it was just (string airlineName)
-    function applyForAirlineRegistration(string airlineName) external{
+    function applyForAirlineRegistration(string calldata airlineName) external{
         flightSuretyData.createAirline(msg.sender, 0, airlineName);
         emit AirlineApplied(msg.sender);
     }
@@ -196,10 +196,12 @@ contract FlightSuretyApp {
     }
     
     // 3. payAirlineDues() = this is a payable function where only the registered airlines makes a payment with onlyRegisteredAirlines
-    function payAirlineDues() external payable { address onlyRegisteredAirlines;
+    // NOTE: line below was originally `function payAirlineDues() external payable { address onlyRegisteredAirlines;`
+    function payAirlineDues(address onlyRegisteredAirlines) external payable {
         require(msg.value == 10 ether, "The required payment of 10 ethere is due.");
         flightSuretyDataContractAddress.transfer(msg.value);
         flightSuretyData.updateAirlineState(msg.sender, 2);
+        
         emit AirlinePaid(msg.sender);
     }
 
@@ -226,8 +228,7 @@ event passengerInsuranceBought(address passenger, bytes32 flightKey);
 
 // 1. purchaseInsurance() = allows passengers to buy insurance ahead of the flight as payable function
 // NOTE: this is a external payable function
-function purchaseInsurance(address airline, string calldata flight, uint256 timestamp) external payable
-{
+function purchaseInsurance(address airline, string calldata flight, uint256 timestamp) external payable{
     bytes32 flightKey = getFlightKey(airline, flight, timestamp);
 
     require(bytes(flights[flightKey].flight).length > 0, "This flight is not an existing one");
