@@ -165,7 +165,7 @@ contract FlightSuretyApp {
 
     // 1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
     // NOTE: added calldata, before it was just (string airlineName)
-    function applyForAirlineRegistration(string calldata airlineName) external{
+    function applyForAirlineRegistration(string airlineName) external{
         flightSuretyData.createAirline(msg.sender, 0, airlineName);
         emit AirlineApplied(msg.sender);
     }
@@ -201,7 +201,7 @@ contract FlightSuretyApp {
         require(msg.value == 10 ether, "The required payment of 10 ethere is due.");
         flightSuretyDataContractAddress.transfer(msg.value);
         flightSuretyData.updateAirlineState(msg.sender, 2);
-        
+
         emit AirlinePaid(msg.sender);
     }
 
