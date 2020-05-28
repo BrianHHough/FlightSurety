@@ -56,14 +56,14 @@ contract FlightSuretyApp {
         require(msg.sender == contractOwner, "Caller is not contract owner");
         _;
     }
-    
+
     // NOTE: made this requireOnlyRegisteredAirlines like IsOperational
     modifier requireOnlyRegisteredAirlines()
     {
         require(flightSuretyData.getAirlineState(msg.sender) == 1, "Only registered allowed");
         _;
     }
-    
+
 
     modifier onlyPaidAirlines()
     {
@@ -104,7 +104,7 @@ contract FlightSuretyApp {
                 "FLIGHT1"
         );
             flightsKeyList.push(flightKey1);
-        
+
         bytes32 flightKey2 = getFlightKey(
             contractOwner,
             "flight2",
@@ -117,7 +117,7 @@ contract FlightSuretyApp {
                 "FLIGHT2"
             );
             flightsKeyList.push(flightKey2);
-        
+
         bytes32 flightKey3 = getFlightKey(
             contractOwner,
             "FLIGHT3",
@@ -312,7 +312,7 @@ function withdrawBalance() external
  /**
     * @dev Add an airline to the registration queue
     *
-    */   
+    */
     function registerAirline() external pure
     returns(
         bool success,
@@ -329,10 +329,10 @@ function withdrawBalance() external
         string memory flight,
         uint256 timestamp,
         uint8 statuscode){
-            airline = flights[ flightsKeyList[index] ].airline;
-            flight = flights[ flightsKeyList[index] ].flight;
-            timestamp = flights[ flightsKeyList[index] ].timestamp;
-            statuscode = flights[ flightsKeyList[index] ].statuscode;
+            airline = flights[flightsKeyList[index]].airline;
+            flight = flights[flightsKeyList[index]].flight;
+            timestamp = flights[flightsKeyList[index]].timestamp;
+            statuscode = flights[flightsKeyList[index]].statuscode;
         }
 
      /**
@@ -481,7 +481,7 @@ function withdrawBalance() external
         // Information isn't considered verified until at least MIN_RESPONSES
         // oracles respond with the *** same *** information
         emit OracleReport(airline, flight, timestamp, statusCode);
-            
+
             if (oracleResponses[key].responses[statusCode].length >= MIN_RESPONSES) {
 
             emit FlightStatusInfo(airline, flight, timestamp, statusCode);
@@ -497,9 +497,9 @@ function withdrawBalance() external
         string memory flight,
         uint256 timestamp
     )
-    pure
     internal
-    returns(bytes32) 
+    pure
+    returns(bytes32)
     {
         return keccak256(abi.encodePacked(airline, flight, timestamp));
     }
