@@ -24,7 +24,7 @@ contract FlightSuretyApp {
     // establish boolean for contract either being operational or not operational:
     bool private operational = true;
 
-    // data is persisted
+    // data is persisted /// flightSuretyData is the data contract instance--declared here
     FlightSuretyData flightSuretyData;
 
     address flightSuretyDataContractAddress;
@@ -86,7 +86,7 @@ contract FlightSuretyApp {
         contractOwner = msg.sender;
 
         flightSuretyDataContractAddress = dataContractAddress;
-        // establish variable
+        // establish variable /// flightSuretyData is the data contract instance--initialized here:
         flightSuretyData = FlightSuretyData(flightSuretyDataContractAddress);
 
 
@@ -165,7 +165,7 @@ contract FlightSuretyApp {
 
     // 1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
     // NOTE: added calldata, before it was just (string airlineName)
-    function applyForAirlineRegistration(string airlineName) external
+    function applyForAirlineRegistration(string calldata airlineName) external
     {
         flightSuretyData.createAirline(msg.sender, 0, airlineName);
         emit AirlineApplied(msg.sender);
@@ -200,7 +200,7 @@ contract FlightSuretyApp {
     function payAirlineDues() external payable { address onlyRegisteredAirlines;
         require(msg.value == 10 ether, "The required payment of 10 ethere is due.");
         flightSuretyDataContractAddress.transfer(msg.value);
-        FlightSuretyData.updateAirlineState(msg.sender, 2);
+        flightSuretyData.updateAirlineState(msg.sender, 2);
         emit AirlinePaid(msg.sender);
     }
 
@@ -227,7 +227,7 @@ event passengerInsuranceBought(address passenger, bytes32 flightKey);
 
 // 1. purchaseInsurance() = allows passengers to buy insurance ahead of the flight as payable function
 // NOTE: this is a external payable function
-function purchaseInsurance(address airline, string flight, uint256 timestamp) external payable
+function purchaseInsurance(address airline, string calldata flight, uint256 timestamp) external payable
 {
     bytes32 flightKey = getFlightKey(airline, flight, timestamp);
 
@@ -239,21 +239,21 @@ function purchaseInsurance(address airline, string flight, uint256 timestamp) ex
 
     uint256 payoutAmount = msg.value + ( msg.value / INSURANCE_DIVIDER);
 
-    FlightSuretyData.createInsurance(msg.sender,flight, msg.value, payoutAmount);
+    flightSuretyData.createInsurance(msg.sender,flight, msg.value, payoutAmount);
 
     emit passengerInsuranceBought(msg.sender,flightKey);
 }
 
 // 2. getInsurance() = allows passenger to receive insurance after buying it
 // NOTE: this is an external view function
-function getInsurance(string flight) external view
+function getInsurance(string calldata flight) external view
 returns (uint256 amount, uint256 payoutAmount, uint256 state)
 {
-    return FlightSuretyData.getInsurance(msg.sender, flight);
+    return flightSuretyData.getInsurance(msg.sender, flight);
 }
 
 // 3. claimInsurance() = allows passenger to claim the right to the insurance they got
-function claimInsurance(address airline, string flight, uint256 timestamp) external
+function claimInsurance(address airline, string calldata flight, uint256 timestamp) external
 {
     bytes32 flightKey = getFlightKey(airline, flight, timestamp);
     require(flights[flightKey].statusCode == STATUS_CODE_LATE_AIRLINE, "This flight was not delayed and insurance will not be paid out");
@@ -266,13 +266,13 @@ function claimInsurance(address airline, string flight, uint256 timestamp) exter
 function getBalance() external view
 returns (uint256 balance)
 {
-    balance = FlightSuretyData.getPassengerBalance(msg.sender);
+    balance = flightSuretyData.getPassengerBalance(msg.sender);
 }
 
 // 5. withdrawBalance() = allows passenger to withdraw the payout into their digital wallet
 function withdrawBalance() external
 {
-    FlightSuretyData.payPassenger(msg.sender);
+    flightSuretyData.payPassenger(msg.sender);
 }
 
 
@@ -315,7 +315,7 @@ function withdrawBalance() external
     */   
     function registerAirline() external pure
     returns(
-        bool success, 
+        bool success,
         uint256 votes){
         return (success, 0);
     }
@@ -342,7 +342,7 @@ function withdrawBalance() external
 
     function registerFlight(
         uint8 status,
-        string flight)
+        string calldata flight)
     external onlyPaidAirlines{
         bytes32 flightKey = getFlightKey(msg.sender, flight, now);
 
@@ -370,7 +370,7 @@ function withdrawBalance() external
     // Generate a request for oracles to fetch flight information
     function fetchFlightStatus(
         address airline, 
-        string flight, 
+        string calldata flight, 
         uint256 timestamp)
     external{
         uint8 index = getRandomIndex(msg.sender);
@@ -460,7 +460,7 @@ function withdrawBalance() external
     function submitOracleResponse(
         uint8 index,
         address airline,
-        string flight,
+        string calldata flight,
         uint256 timestamp,
         uint8 statusCode
     )
