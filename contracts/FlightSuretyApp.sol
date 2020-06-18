@@ -19,18 +19,40 @@ contract FlightSuretyApp {
     /*                                GLOBAL DATA VARIABLES                                     */
     /********************************************************************************************/
 
+    // Establish codes for each status
+    // Status: Unknown
+    uint8 private constant STATUS_CODE_UNKNOWN = 0;
+    // Status: On Time
+    uint8 private constant STATUS_CODE_ON_TIME = 0;
+    // Status: Airplane is late (AIRLINE'S FAULT)
+    uint8 private constant STATUS_CODE_LATE_AIRLINE = 20;
+    // Status: Weather makes plane late
+    uint8 private constant STATUS_CODE_LATE_WEATHER = 30;
+    // Status: Technical issue makes plane late
+    uint8 private constant STATUS_CODE_LATE_TECHNICAL = 40;
+    // Status: Other reason for lateness
+    uint8 private constant STATUS_CODE_LATE_OTHER = 50;
+
     // Account used to deploy contract
     address private contractOwner;
-    // establish boolean for contract either being operational or not operational:
-    bool private operational = true;
+    
+    struct Flight {
+        // establish boolean for contract either being operational or not operational by being registered: 
+        bool isRegistered;
+        // establish uint8 for the status
+        uint8 statusCode;
+        // establish uint256 for new Timestamps
+        uint256 updatedTimestamp;
+        address airline;
+     }
+    mapping(bytes32 => Flight) private flights;
 
     // data is persisted /// flightSuretyData is the data contract instance--declared here
-    FlightSuretyData flightSuretyData;
-
-    address flightSuretyDataContractAddress;
+    // UPDATE: Removed b/c was confusing the algo
+    // FlightSuretyData flightSuretyData;
 
     /********************************************************************************************/
-    /*              CONSTRUCTORS; FUNCTION MODIFIERS; UTILITY FUNCTIONS                         */
+    /*                                FUNCTION MODIFIERS                                        */
     /********************************************************************************************/
 
     // Modifiers help avoid duplication of code. They are typically used to validate something
@@ -44,7 +66,8 @@ contract FlightSuretyApp {
     modifier requireIsOperational()
     {
          // Modify to call data contract's status
-        require(operational, "Contract is currently not operational");
+         // Changed from "operational" to true -- realized that the boolean wasn't being applied correctly
+        require(true, "This contract is currently not operational");
         _;  // All modifiers require an "_" which indicates where the function body will be added
     }
 
@@ -53,10 +76,11 @@ contract FlightSuretyApp {
     */
     modifier requireContractOwner()
     {
-        require(msg.sender == contractOwner, "Caller is not contract owner");
+        require(msg.sender == contractOwner, "This specified caller is not the contract owner");
         _;
     }
 
+/*
     // NOTE: made this requireOnlyRegisteredAirlines like IsOperational /// NOTE: updated to the below:
     modifier onlyRegisteredAirlines()
     {
@@ -70,82 +94,130 @@ contract FlightSuretyApp {
         require(flightSuretyData.getAirlineState(msg.sender) == 2, "Only the airlines that have paid are allowed to be part of the pool!");
         _;
     }
-
+*/
 
    /********************************************************************************************/
-    /*                                       CONSTRUCTORS                                       */
-    /********************************************************************************************/
+   /*                                       CONSTRUCTORS                                       */
+   /********************************************************************************************/
 
     /**
     * @dev Contract constructor
     *
     */
-    constructor(address dataContractAddress)
+    constructor()
     public
     {
         contractOwner = msg.sender;
-
-        flightSuretyDataContractAddress = dataContractAddress;
-        // establish variable /// flightSuretyData is the data contract instance--initialized here:
-        flightSuretyData = FlightSuretyData(flightSuretyDataContractAddress);
-
-
-        // First flights -- start
-
-        bytes32 flightKey1 = getFlightKey(
-            contractOwner,
-            "FLIGHT1",
-            now
-        );
-            flights[flightKey1] = Flight(
-                STATUS_CODE_UNKNOWN,
-                now,
-                contractOwner,
-                "FLIGHT1"
-        );
-            flightsKeyList.push(flightKey1);
-
-        bytes32 flightKey2 = getFlightKey(
-            contractOwner,
-            "FLIGHT2",
-            now + 1 days
-        );
-            flights[flightKey2] = Flight(
-                STATUS_CODE_UNKNOWN,
-                now + 1 days,
-                contractOwner,
-                "FLIGHT2"
-            );
-            flightsKeyList.push(flightKey2);
-
-        bytes32 flightKey3 = getFlightKey(
-            contractOwner,
-            "FLIGHT3",
-            now + 2 days
-        );
-            flights[flightKey3] = Flight(
-                STATUS_CODE_UNKNOWN,
-                now + 2 days,
-                contractOwner,
-                "FLIGHT3"
-            );
-            flightsKeyList.push(flightKey3);
     }
 
-    function isOperational() public view returns (bool)
+   /********************************************************************************************/
+   /*                                     UTILITY FUNCTIONS                                    */
+   /********************************************************************************************/
+
+    function isOperational() 
+        public
+        pure 
+        returns(bool)
     {
-        return operational;
+        // Update: changed it from return operational to return true....so that the function isOperational calls the status of the data contract
+        return true;
     }
 
+/*
     // IMPLEMENT OPTIONAL STATUS UPDATE
     function setOperatingStatus (bool mode) external requireContractOwner
     {
         operational = mode;
     }
+*/
+ /********************************************************************************************/
+ /*                           SMART CONTRACTS: AIRLINE FUNCTIONS                             */
+ /********************************************************************************************/
 
- /********************************************************************************************/
- /*                                     AIRLINE FUNCTIONS                                    */
- /********************************************************************************************/
+// I AM HERE
+
+/**
+    * @dev Add an airline to the registration queue
+    *
+    */
+    function registerAirline() 
+        external 
+        pure
+        returns(
+            bool success,
+            uint256 votes)
+            {
+        return (success, 0);
+    }
+
+    function getFlightsCount() external view returns(uint256 count) {
+        return flightsKeyList.length;
+    }
+
+    function getFlight(uint256 index) external view returns(
+        address airline,
+        string memory flight,
+        uint256 timestamp,
+        uint8 statuscode){
+            airline = flights[flightsKeyList[index]].airline;
+            flight = flights[flightsKeyList[index]].flight;
+            timestamp = flights[flightsKeyList[index]].timestamp;
+            statuscode = flights[flightsKeyList[index]].statuscode;
+        }
+
+     /**
+    * @dev Register a future flight for insuring.
+    *
+    */
+
+    function registerFlight(
+        uint8 status,
+        string calldata flight)
+    external onlyPaidAirlines{
+        bytes32 flightKey = getFlightKey(msg.sender, flight, now);
+
+        flights[flightKey] = Flight(status, now, msg.sender, flight);
+        flightsKeyList.push(flightKey);
+    }
+
+    /**
+    * @dev Called after oracle has updated flight status
+    *
+    */
+
+    function processFlightStatus(
+        address airline,
+        string memory flight,
+        uint256 timestamp,
+        uint8 statusCode)
+    private{
+        bytes32 flightKey = getFlightKey(airline, flight, timestamp);
+        flights[flightKey].statusCode = statusCode;
+
+        emit FlightStatusProcessed(airline, flight, statusCode);
+    }
+
+    // Generate a request for oracles to fetch flight information
+    function fetchFlightStatus(
+        address airline, 
+        string calldata flight, 
+        uint256 timestamp)
+    external{
+        uint8 index = getRandomIndex(msg.sender);
+        // Generate a unique key for storing the request
+        bytes32 key = keccak256(abi.encodePacked(index, airline, flight, timestamp));
+        oracleResponses[key] = ResponseInfo({
+            requester : msg.sender,
+            isOpen : true
+        });
+        emit OracleRequest(index, airline, flight, timestamp);
+    }
+
+
+
+
+
+
 
     // establish constant variable about counting consensus needed (need more than half for majority stake/consensus building)
     uint8 private constant NO_AIRLINES_REQUIRED_FOR_CONSENSUS_VOTING = 4;
@@ -165,7 +237,7 @@ contract FlightSuretyApp {
 
     // 1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
     // NOTE: added calldata, before it was just (string airlineName)
-    function applyForAirlineRegistration(string airlineName) external{
+    function applyForAirlineRegistration(string calldata airlineName) external{
         flightSuretyData.createAirline(msg.sender, 0, airlineName);
         emit AirlineApplied(msg.sender);
     }
@@ -194,7 +266,7 @@ contract FlightSuretyApp {
             emit AirlineRegistered(airline);
         }
     }
-    
+
     // 3. payAirlineDues() = this is a payable function where only the registered airlines makes a payment with onlyRegisteredAirlines
     // NOTE: line below was originally `function payAirlineDues() external payable { address onlyRegisteredAirlines;`
     function payAirlineDues(address onlyRegisteredAirlines) external payable {
@@ -309,80 +381,7 @@ function withdrawBalance() external
     // NOTE: Added in updated timestamp
     event FlightStatusProcessed(address airline, string flight, uint256 updatedTimestamp, uint8 statusCode);
 
- /**
-    * @dev Add an airline to the registration queue
-    *
-    */
-    function registerAirline() external pure
-    returns(
-        bool success,
-        uint256 votes){
-        return (success, 0);
-    }
-
-    function getFlightsCount() external view returns(uint256 count) {
-        return flightsKeyList.length;
-    }
-
-    function getFlight(uint256 index) external view returns(
-        address airline,
-        string memory flight,
-        uint256 timestamp,
-        uint8 statuscode){
-            airline = flights[flightsKeyList[index]].airline;
-            flight = flights[flightsKeyList[index]].flight;
-            timestamp = flights[flightsKeyList[index]].timestamp;
-            statuscode = flights[flightsKeyList[index]].statuscode;
-        }
-
-     /**
-    * @dev Register a future flight for insuring.
-    *
-    */
-
-    function registerFlight(
-        uint8 status,
-        string calldata flight)
-    external onlyPaidAirlines{
-        bytes32 flightKey = getFlightKey(msg.sender, flight, now);
-
-        flights[flightKey] = Flight(status, now, msg.sender, flight);
-        flightsKeyList.push(flightKey);
-    }
-
-    /**
-    * @dev Called after oracle has updated flight status
-    *
-    */
-
-    function processFlightStatus(
-        address airline,
-        string memory flight,
-        uint256 timestamp,
-        uint8 statusCode)
-    private{
-        bytes32 flightKey = getFlightKey(airline, flight, timestamp);
-        flights[flightKey].statusCode = statusCode;
-
-        emit FlightStatusProcessed(airline, flight, statusCode);
-    }
-
-    // Generate a request for oracles to fetch flight information
-    function fetchFlightStatus(
-        address airline, 
-        string calldata flight, 
-        uint256 timestamp)
-    external{
-        uint8 index = getRandomIndex(msg.sender);
-        // Generate a unique key for storing the request
-        bytes32 key = keccak256(abi.encodePacked(index, airline, flight, timestamp));
-        oracleResponses[key] = ResponseInfo({
-            requester : msg.sender,
-            isOpen : true
-        });
-        emit OracleRequest(index, airline, flight, timestamp);
-    }
-
+ 
 /********************************************************************************************/
 /*                                       ORACLE MANAGEMENT                                  */
 /********************************************************************************************/
@@ -598,4 +597,53 @@ contract FlightSuretyData {
     {}
 
 }
+
+/* moving these to end so can edit later
+
+        flightSuretyDataContractAddress = dataContractAddress;
+        // establish variable /// flightSuretyData is the data contract instance--initialized here:
+        flightSuretyData = FlightSuretyData(flightSuretyDataContractAddress);
+
+
+        // First flights -- start
+
+        bytes32 flightKey1 = getFlightKey(
+            contractOwner,
+            "FLIGHT1",
+            now
+        );
+            flights[flightKey1] = Flight(
+                STATUS_CODE_UNKNOWN,
+                now,
+                contractOwner,
+                "FLIGHT1"
+        );
+            flightsKeyList.push(flightKey1);
+
+        bytes32 flightKey2 = getFlightKey(
+            contractOwner,
+            "FLIGHT2",
+            now + 1 days
+        );
+            flights[flightKey2] = Flight(
+                STATUS_CODE_UNKNOWN,
+                now + 1 days,
+                contractOwner,
+                "FLIGHT2"
+            );
+            flightsKeyList.push(flightKey2);
+
+        bytes32 flightKey3 = getFlightKey(
+            contractOwner,
+            "FLIGHT3",
+            now + 2 days
+        );
+            flights[flightKey3] = Flight(
+                STATUS_CODE_UNKNOWN,
+                now + 2 days,
+                contractOwner,
+                "FLIGHT3"
+            );
+            flightsKeyList.push(flightKey3);
+
 
