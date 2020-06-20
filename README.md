@@ -164,3 +164,99 @@ There are two smart contracts used in FlightSurety for the App and for the Data.
 ## Created server with npm run start
 ![](./images/FlightSurety-server.png)
 
+## Deployed
+![](FlightSuretyDeployed.png)
+
+## Terminal code of transactions/hashes:
+    net_version
+    eth_blockNumber
+    eth_getBlockByNumber
+    eth_getTransactionCount
+    eth_sendRawTransaction
+
+    Transaction: 0xdefbc0fc691af6021ed87eddd0c4f3b4c84b911c525d95f97efd0d69f8b34b9d
+    Contract created: 0x8cdaf0cd259887258bc13a92c0a6da92698644c0
+    Gas usage: 238582
+    Block Number: 1
+    Block Time: Sat Jun 20 2020 09:13:37 GMT-0400 (Eastern Daylight Time)
+
+    eth_getTransactionReceipt
+    eth_getCode
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_sendRawTransaction
+
+    Transaction: 0x0a487bf4bf72b9ad7207c31c28c49926314452ccd5ab0179de8353147437658d
+    Gas usage: 42348
+    Block Number: 2
+    Block Time: Sat Jun 20 2020 09:13:37 GMT-0400 (Eastern Daylight Time)
+
+    eth_getTransactionReceipt
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    net_version
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    net_version
+    eth_getBlockByNumber
+    eth_estimateGas
+    net_version
+    eth_blockNumber
+    eth_getBlockByNumber
+    eth_sendRawTransaction
+
+    Transaction: 0x9257889f8cfafa2531f78368022bc8855690c1f856910a6402e33b9a1eba1a93
+    Contract created: 0x345ca3e014aaf5dca488057592ee47305d9b3e10
+    Gas usage: 211462
+    Block Number: 3
+    Block Time: Sat Jun 20 2020 09:13:38 GMT-0400 (Eastern Daylight Time)
+
+    eth_getTransactionReceipt
+    eth_getCode
+    net_version
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    net_version
+    eth_getBlockByNumber
+    eth_estimateGas
+    net_version
+    eth_blockNumber
+    eth_getBlockByNumber
+    eth_sendRawTransaction
+
+    Transaction: 0xa336a4e39aaab4a4e830f712de699fea418bcbed0cfafcc9ed8b76784a48d2ab
+    Contract created: 0xf25186b5081ff5ce73482ad761db0eb0d25abfbf
+    Gas usage: 1063936
+    Block Number: 4
+    Block Time: Sat Jun 20 2020 09:13:39 GMT-0400 (Eastern Daylight Time)
+
+    eth_getTransactionReceipt
+    eth_getCode
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_getBlockByNumber
+    eth_sendRawTransaction
+
+    Transaction: 0xce556d511be06fa1e97b8609a9b527401cc7ba1e40fca85b0a9461d6a6715d67
+    Gas usage: 27348
+    Block Number: 5
+    Block Time: Sat Jun 20 2020 09:13:39 GMT-0400 (Eastern Daylight Time)
+
+    eth_getTransactionReceipt
+    
