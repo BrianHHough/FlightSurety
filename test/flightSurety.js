@@ -1,9 +1,10 @@
 // Updated "var" to "const"
 // UPDATE TO UPDATE: changed back to "var"
-var Test = require('../config/testConfig.js');
+const Test = require('../config/testConfig.js');
 // add in truffle assertion about requiring truffle here:
 // const truffleAssert = require('truffle-assertions');
-var BigNumber = require('bignumber.js');
+// const truffleAssert = require('truffle-assertions');
+const BigNumber = require('bignumber.js');
 
 // establish a series of let components leading up to testing the contracts to establish the variables and items to analyze:
 
