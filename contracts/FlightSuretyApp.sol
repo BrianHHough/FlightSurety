@@ -120,6 +120,8 @@ contract FlightSuretyApp {
         returns(bool)
     {
         // Update: changed it from return operational to return true....so that the function isOperational calls the status of the data contract
+
+        // Modified the contract to call the data contract's status
         return true;
     }
 
@@ -134,9 +136,7 @@ contract FlightSuretyApp {
  /*                           SMART CONTRACTS: AIRLINE FUNCTIONS                             */
  /********************************************************************************************/
 
-// I AM HERE
-
-/**
+    /**
     * @dev Add an airline to the registration queue
     *
     */
@@ -146,9 +146,74 @@ contract FlightSuretyApp {
         returns(
             bool success,
             uint256 votes)
-            {
+        {
         return (success, 0);
+        }
+
+
+    /**
+    * @dev Register a future flight for insuring.
+    *
+    */
+
+    
+    function registerFlight()
+
+        // uint8 status,
+        // string calldata flight)
+        external // onlyPaidAirlines
+        pure
+        {
+        // bytes32 flightKey = getFlightKey(msg.sender, flight, now);
+
+        // flights[flightKey] = Flight(status, now, msg.sender, flight);
+        //flightsKeyList.push(flightKey);
     }
+
+    /**
+    * @dev Called after oracle has updated flight status
+    *
+    */
+
+    function processFlightStatus(
+        address airline,
+        string memory flight,
+        uint256 timestamp,
+        uint8 statusCode)
+    
+        internal
+        pure
+    {
+    }
+    // private{
+        // bytes32 flightKey = getFlightKey(airline, flight, timestamp);
+        // flights[flightKey].statusCode = statusCode;
+
+        // emit FlightStatusProcessed(airline, flight, statusCode);
+    // }
+
+
+
+
+    // Generate a request for oracles to fetch flight information
+    function fetchFlightStatus(
+        address airline, 
+        string flight, 
+        uint256 timestamp)
+    external{
+        uint8 index = getRandomIndex(msg.sender);
+        // Generate a unique key for storing the request
+        bytes32 key = keccak256(abi.encodePacked(index, airline, flight, timestamp));
+        oracleResponses[key] = ResponseInfo({
+            requester: msg.sender,
+            isOpen: true
+        });
+        emit OracleRequest(index, airline, flight, timestamp);
+    }
+
+
+
+/*
 
     function getFlightsCount() external view returns(uint256 count) {
         return flightsKeyList.length;
@@ -165,53 +230,8 @@ contract FlightSuretyApp {
             statuscode = flights[flightsKeyList[index]].statuscode;
         }
 
-     /**
-    * @dev Register a future flight for insuring.
-    *
-    */
+*/
 
-    function registerFlight(
-        uint8 status,
-        string calldata flight)
-    external onlyPaidAirlines{
-        bytes32 flightKey = getFlightKey(msg.sender, flight, now);
-
-        flights[flightKey] = Flight(status, now, msg.sender, flight);
-        flightsKeyList.push(flightKey);
-    }
-
-    /**
-    * @dev Called after oracle has updated flight status
-    *
-    */
-
-    function processFlightStatus(
-        address airline,
-        string memory flight,
-        uint256 timestamp,
-        uint8 statusCode)
-    private{
-        bytes32 flightKey = getFlightKey(airline, flight, timestamp);
-        flights[flightKey].statusCode = statusCode;
-
-        emit FlightStatusProcessed(airline, flight, statusCode);
-    }
-
-    // Generate a request for oracles to fetch flight information
-    function fetchFlightStatus(
-        address airline, 
-        string calldata flight, 
-        uint256 timestamp)
-    external{
-        uint8 index = getRandomIndex(msg.sender);
-        // Generate a unique key for storing the request
-        bytes32 key = keccak256(abi.encodePacked(index, airline, flight, timestamp));
-        oracleResponses[key] = ResponseInfo({
-            requester : msg.sender,
-            isOpen : true
-        });
-        emit OracleRequest(index, airline, flight, timestamp);
-    }
 
 
 
@@ -220,21 +240,22 @@ contract FlightSuretyApp {
 
 
     // establish constant variable about counting consensus needed (need more than half for majority stake/consensus building)
-    uint8 private constant NO_AIRLINES_REQUIRED_FOR_CONSENSUS_VOTING = 4;
+    // uint8 private constant NO_AIRLINES_REQUIRED_FOR_CONSENSUS_VOTING = 4;
 
     /* Establish 3 events for Airline that can happen:
     1. Applied
     2. Registered
     3. Paid */
-    event AirlineApplied(address airline);
-    event AirlineRegistered(address airline);
-    event AirlinePaid(address airline);
+    // event AirlineApplied(address airline);
+    // event AirlineRegistered(address airline);
+    // event AirlinePaid(address airline);
 
     /* Establish 3 functions for Airlines:
     1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
     2. approveAirlineRegistration() = approve the airline's registrations - this is a boolean: it either is approved or rejected
     3. payAirlineDues() = this is a payable function where only the registered airlines makes a payment */
 
+/*
     // 1. applyForAirlineRegistration() = the airline applies for registration - this is an external "action"
     // NOTE: added calldata, before it was just (string airlineName)
     function applyForAirlineRegistration(string calldata airlineName) external{
@@ -277,17 +298,17 @@ contract FlightSuretyApp {
         emit AirlinePaid(msg.sender);
     }
 
-
+*/
  /********************************************************************************************/
  /*                          PASSENGER INSURANCE CODES / FUNCTIONS                           */
  /********************************************************************************************/
-uint8 private constant MAX_INSURANCE_AMOUNT = 10;
+// uint8 private constant MAX_INSURANCE_AMOUNT = 10;
 // uint8 private constant INSURANCE_DIVIDER;
 // uint8 private nonce = 0;
-uint256 public constant INSURANCE_DIVIDER = 2;
+// uint256 public constant INSURANCE_DIVIDER = 2;
 
 // NOTE: added passengerInsuranceBought b/c need a new event handler
-event passengerInsuranceBought(address passenger, bytes32 flightKey);
+// event passengerInsuranceBought(address passenger, bytes32 flightKey);
 
 /* CREATE A SET OF FIVE FUNCTIONS:
 1. purchaseInsurance() = allows passengers to buy insurance ahead of the flight as payable function
@@ -296,10 +317,11 @@ event passengerInsuranceBought(address passenger, bytes32 flightKey);
 4. getBalance() = allows passenger to receive payout from the airline if flight is delayed
 5. withdrawBalance() = allows passenger to withdraw the payout into their digital wallet
 
-*/
+
 
 // 1. purchaseInsurance() = allows passengers to buy insurance ahead of the flight as payable function
 // NOTE: this is a external payable function
+
 function purchaseInsurance(address airline, string calldata flight, uint256 timestamp) external payable{
     bytes32 flightKey = getFlightKey(airline, flight, timestamp);
 
@@ -346,13 +368,13 @@ function withdrawBalance() external
 {
     flightSuretyData.payPassenger(msg.sender);
 }
-
+*/
 
  /********************************************************************************************/
  /*                               FLIGHT STATUS CODES / FUNCTIONS                            */
  /********************************************************************************************/
 
-
+    /*
     // Flight status codes
     // Late_Airline (20) is related to only the airline - this would trigger the payment to the passengers who invested...everything else a product of nature/not related to airline's fault.
     uint8 private constant STATUS_CODE_UNKNOWN = 0;
@@ -380,10 +402,10 @@ function withdrawBalance() external
 
     // NOTE: Added in updated timestamp
     event FlightStatusProcessed(address airline, string flight, uint256 updatedTimestamp, uint8 statusCode);
-
+*/
  
 /********************************************************************************************/
-/*                                       ORACLE MANAGEMENT                                  */
+/* ORACLE MANAGEMENT                                  */
 /********************************************************************************************/
 
     // Incremented to add pseudo-randomness at various points
@@ -409,8 +431,10 @@ function withdrawBalance() external
         address requester;                              // Account that requested status
         bool isOpen;                                    // If open, oracle responses are accepted
         mapping(uint8 => address[]) responses;          // Mapping key is the status code reported
-                                                        // This lets us group responses and identify
-                                                        // the response that majority of the oracles
+        
+        // This lets us group responses and identify
+        
+        // The response that majority of the oracles
     }
 
     // Track all oracle responses
@@ -418,18 +442,32 @@ function withdrawBalance() external
     mapping(bytes32 => ResponseInfo) private oracleResponses;
 
     // Event fired each time an oracle submits a response
-    event FlightStatusInfo(address airline, string flight, uint256 timestamp, uint8 status);
+    event FlightStatusInfo(
+        address airline, 
+        string flight, 
+        uint256 timestamp, 
+        uint8 status);
 
-    event OracleReport(address airline, string flight, uint256 timestamp, uint8 status);
+    event OracleReport(
+        address airline, 
+        string flight, 
+        uint256 timestamp, 
+        uint8 status);
 
     // Event fired when flight status request is submitted
     // Oracles track this and if they have a matching index
     // they fetch data and submit a response
-    event OracleRequest(uint8 index, address airline, string flight, uint256 timestamp);
+    event OracleRequest(
+        uint8 index, 
+        address airline, 
+        string flight, 
+        uint256 timestamp);
 
 
     // Register an oracle with the contract
-    function registerOracle() external payable
+    function registerOracle() 
+        external 
+        payable
     {
         // Require registration fee
         require(msg.value >= REGISTRATION_FEE, "Registration fee is required");
@@ -443,8 +481,10 @@ function withdrawBalance() external
     }
 
     // NOTE: added memory after uint8[3] b/c "Error: Data location must be "memory" for return parameter in function, but none was given."
-    function getMyIndexes() external view
-    returns(uint8[3] memory)
+    function getMyIndexes() 
+        view
+        external 
+        returns(uint8[3])
     {
         require(oracles[msg.sender].isRegistered, "Not registered as an oracle");
 
@@ -459,11 +499,11 @@ function withdrawBalance() external
     function submitOracleResponse(
         uint8 index,
         address airline,
-        string calldata flight,
+        string flight,
         uint256 timestamp,
         uint8 statusCode
-    )
-    external
+        )
+        external
     {
         require(
             (oracles[msg.sender].indexes[0] == index) ||
@@ -472,7 +512,11 @@ function withdrawBalance() external
         );
 
 
-        bytes32 key = keccak256(abi.encodePacked(index, airline, flight, timestamp));
+        bytes32 key = keccak256(abi.encodePacked(
+            index, 
+            airline, 
+            flight, 
+            timestamp));
         require(oracleResponses[key].isOpen, "Flight or timestamp do not match oracle request");
 
         oracleResponses[key].responses[statusCode].push(msg.sender);
@@ -493,20 +537,22 @@ function withdrawBalance() external
 
     function getFlightKey(
         address airline,
-        string memory flight,
+        string flight,
         uint256 timestamp
-    )
-    internal
-    pure
-    returns(bytes32)
+        )
+        pure
+        internal
+        returns(bytes32)
     {
         return keccak256(abi.encodePacked(airline, flight, timestamp));
     }
 
     // Returns array of three non-duplicating integers from 0-9
     // NOTE: added memory after uint8[3] b/c "Error: Data location must be "storage" or "memory" for return parameter in function, but none was given."
-    function generateIndexes(address account)
-    internal returns(uint8[3] memory)
+    function generateIndexes(
+        address account)
+        internal 
+        returns(uint8[3])
     {
         uint8[3] memory indexes;
         indexes[0] = getRandomIndex(account);
@@ -525,8 +571,10 @@ function withdrawBalance() external
     }
 
     // Returns array of three non-duplicating integers from 0-9
-    function getRandomIndex(address account)
-    internal returns (uint8)
+    function getRandomIndex(
+        address account)
+        internal 
+        returns (uint8)
     {
         uint8 maxValue = 10;
 
@@ -548,6 +596,7 @@ function withdrawBalance() external
 
 // Note: added in "external" to the external view components below to avoid error: "security/enforce-explicit-visibility: No visibility specified explicitly for getAirlineState function."
 
+/*
 contract FlightSuretyData {
     function getAirlineState(address airline) public
     returns(uint)
@@ -645,5 +694,5 @@ contract FlightSuretyData {
                 "FLIGHT3"
             );
             flightsKeyList.push(flightKey3);
-
+*/
 
