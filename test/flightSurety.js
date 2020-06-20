@@ -32,7 +32,7 @@ contract('Flight Surety Tests', async (accounts) => {
     // removed before('setup contract', async...)
     before('setup contract', async () => {
         config = await Test.Config(accounts);
-        await config.flightSuretyData.requireIsOperational(config.flightSuretyApp.address);
+        // await config.flightSuretyData.authorizeCaller(config.flightSuretyApp.address);
     });
 
   /****************************************************************************************/
