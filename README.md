@@ -156,8 +156,11 @@ There are two smart contracts used in FlightSurety for the App and for the Data.
 - Needed to update the `pragma solidity ^0.4.24;` file to `>=0.4.25`
 
 
-# Contracts compile successfully!
-[!](./images/FlightSuretyContractsCompileSuccessfully.png)
+# Requirements:
 
+## Contracts compile successfully!
+![](./images/FlightSuretyContractsCompileSuccessfully.png)
 
+## Created server with npm run start
+![](./images/FlightSurety-server.png)
 
