@@ -35,9 +35,9 @@ contract FlightSuretyApp {
 
     // Account used to deploy contract
     address private contractOwner;
-    
+
     struct Flight {
-        // establish boolean for contract either being operational or not operational by being registered: 
+        // establish boolean for contract either being operational or not operational by being registered:
         bool isRegistered;
         // establish uint8 for the status
         uint8 statusCode;
@@ -114,9 +114,9 @@ contract FlightSuretyApp {
    /*                                     UTILITY FUNCTIONS                                    */
    /********************************************************************************************/
 
-    function isOperational() 
+    function isOperational()
         public
-        pure 
+        pure
         returns(bool)
     {
         // Update: changed it from return operational to return true....so that the function isOperational calls the status of the data contract
@@ -140,8 +140,8 @@ contract FlightSuretyApp {
     * @dev Add an airline to the registration queue
     *
     */
-    function registerAirline() 
-        external 
+    function registerAirline()
+        external
         pure
         returns(
             bool success,
@@ -156,14 +156,13 @@ contract FlightSuretyApp {
     *
     */
 
-    
+
     function registerFlight()
 
         // uint8 status,
         // string calldata flight)
         external // onlyPaidAirlines
-        pure
-        {
+        pure{
         // bytes32 flightKey = getFlightKey(msg.sender, flight, now);
 
         // flights[flightKey] = Flight(status, now, msg.sender, flight);
@@ -180,7 +179,7 @@ contract FlightSuretyApp {
         string memory flight,
         uint256 timestamp,
         uint8 statusCode)
-    
+
         internal
         pure
     {
@@ -197,8 +196,8 @@ contract FlightSuretyApp {
 
     // Generate a request for oracles to fetch flight information
     function fetchFlightStatus(
-        address airline, 
-        string flight, 
+        address airline,
+        string flight,
         uint256 timestamp)
     external{
         uint8 index = getRandomIndex(msg.sender);
@@ -403,7 +402,7 @@ function withdrawBalance() external
     // NOTE: Added in updated timestamp
     event FlightStatusProcessed(address airline, string flight, uint256 updatedTimestamp, uint8 statusCode);
 */
- 
+
 /********************************************************************************************/
 /* ORACLE MANAGEMENT                                  */
 /********************************************************************************************/
@@ -431,9 +430,9 @@ function withdrawBalance() external
         address requester;                              // Account that requested status
         bool isOpen;                                    // If open, oracle responses are accepted
         mapping(uint8 => address[]) responses;          // Mapping key is the status code reported
-        
+
         // This lets us group responses and identify
-        
+
         // The response that majority of the oracles
     }
 
@@ -443,30 +442,30 @@ function withdrawBalance() external
 
     // Event fired each time an oracle submits a response
     event FlightStatusInfo(
-        address airline, 
-        string flight, 
-        uint256 timestamp, 
+        address airline,
+        string flight,
+        uint256 timestamp,
         uint8 status);
 
     event OracleReport(
-        address airline, 
-        string flight, 
-        uint256 timestamp, 
+        address airline,
+        string flight,
+        uint256 timestamp,
         uint8 status);
 
     // Event fired when flight status request is submitted
     // Oracles track this and if they have a matching index
     // they fetch data and submit a response
     event OracleRequest(
-        uint8 index, 
-        address airline, 
-        string flight, 
+        uint8 index,
+        address airline,
+        string flight,
         uint256 timestamp);
 
 
     // Register an oracle with the contract
-    function registerOracle() 
-        external 
+    function registerOracle()
+        external
         payable
     {
         // Require registration fee
@@ -481,9 +480,9 @@ function withdrawBalance() external
     }
 
     // NOTE: added memory after uint8[3] b/c "Error: Data location must be "memory" for return parameter in function, but none was given."
-    function getMyIndexes() 
+    function getMyIndexes()
         view
-        external 
+        external
         returns(uint8[3])
     {
         require(oracles[msg.sender].isRegistered, "Not registered as an oracle");
@@ -513,9 +512,9 @@ function withdrawBalance() external
 
 
         bytes32 key = keccak256(abi.encodePacked(
-            index, 
-            airline, 
-            flight, 
+            index,
+            airline,
+            flight,
             timestamp));
         require(oracleResponses[key].isOpen, "Flight or timestamp do not match oracle request");
 
@@ -551,7 +550,7 @@ function withdrawBalance() external
     // NOTE: added memory after uint8[3] b/c "Error: Data location must be "storage" or "memory" for return parameter in function, but none was given."
     function generateIndexes(
         address account)
-        internal 
+        internal
         returns(uint8[3])
     {
         uint8[3] memory indexes;
@@ -573,7 +572,7 @@ function withdrawBalance() external
     // Returns array of three non-duplicating integers from 0-9
     function getRandomIndex(
         address account)
-        internal 
+        internal
         returns (uint8)
     {
         uint8 maxValue = 10;
