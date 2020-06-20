@@ -165,7 +165,7 @@ There are two smart contracts used in FlightSurety for the App and for the Data.
 ![](./images/FlightSurety-server.png)
 
 ## Deployed
-![](FlightSuretyDeployed.png)
+![](./images/FlightSuretyDeployed.png)
 
 ## Terminal code of transactions/hashes:
     net_version
@@ -259,4 +259,91 @@ There are two smart contracts used in FlightSurety for the App and for the Data.
     Block Time: Sat Jun 20 2020 09:13:39 GMT-0400 (Eastern Daylight Time)
 
     eth_getTransactionReceipt
-    
+
+## FlightSurety Deployed In Browswer
+![](./images/FlightSurety-DeployedAppInBrowser.png)
+
+## FlightSurety Processes Correctly With `truffle migrate --reset`
+
+    (base) XXXXXX:FlightSurety XXXXXX$ truffle migrate --reset
+
+    Compiling your contracts...
+    ===========================
+    > Everything is up to date, there is nothing to compile.
+
+
+
+    Starting migrations...
+    ======================
+    > Network name:    'development'
+    > Network id:      1592658794416
+    > Block gas limit: 0x6691b7
+
+
+    1_initial_migration.js
+    ======================
+
+    Deploying 'Migrations'
+    ----------------------
+    > transaction hash:    0xcdbaf7e48655eb84f1330b6badc65edf464171e654cc9a9f67cf31fd2d946015
+    > Blocks: 0            Seconds: 0
+    > contract address:    0x3d49d1eF2adE060a33c6E6Aa213513A7EE9a6241
+    > block number:        33
+    > block timestamp:     1592671151
+    > account:             0x627306090abaB3A6e1400e9345bC60c78a8BEf57
+    > balance:             99.84189658
+    > gas used:            238582
+    > gas price:           20 gwei
+    > value sent:          0 ETH
+    > total cost:          0.00477164 ETH
+
+
+    > Saving migration to chain.
+    > Saving artifacts
+    -------------------------------------
+    > Total cost:          0.00477164 ETH
+
+
+    2_deploy_contracts.js
+    =====================
+
+    Deploying 'FlightSuretyData'
+    ----------------------------
+    > transaction hash:    0x76b239e3d81f3980bd5d60dca5d7f0879453b96b1593a17c9046b5e67188c327
+    > Blocks: 0            Seconds: 0
+    > contract address:    0xBd2c938B9F6Bfc1A66368D08CB44dC3EB2aE27bE
+    > block number:        35
+    > block timestamp:     1592671153
+    > account:             0x627306090abaB3A6e1400e9345bC60c78a8BEf57
+    > balance:             99.83682038
+    > gas used:            211462
+    > gas price:           20 gwei
+    > value sent:          0 ETH
+    > total cost:          0.00422924 ETH
+
+
+    Deploying 'FlightSuretyApp'
+    ---------------------------
+    > transaction hash:    0x346e8b5c155292a98258837b4d7302a38b3086bffcc713d61060dfe03985c085
+    > Blocks: 0            Seconds: 0
+    > contract address:    0x2EcA6FCFef74E2c8D03fBAf0ff6712314c9BD58B
+    > block number:        36
+    > block timestamp:     1592671153
+    > account:             0x627306090abaB3A6e1400e9345bC60c78a8BEf57
+    > balance:             99.81554166
+    > gas used:            1063936
+    > gas price:           20 gwei
+    > value sent:          0 ETH
+    > total cost:          0.02127872 ETH
+
+
+    > Saving migration to chain.
+    > Saving artifacts
+    -------------------------------------
+    > Total cost:          0.02550796 ETH
+
+
+    Summary
+    =======
+    > Total deployments:   3
+    > Final cost:          0.0302796 ETH
