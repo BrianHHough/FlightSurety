@@ -5,24 +5,26 @@ const BigNumber = require('bignumber.js');
 // let config;
 // var accounts;
 
-  const TEST_ORACLES_COUNT = 20;
-  // Watch contract events
-  const STATUS_CODE_UNKNOWN = 0;
-  const STATUS_CODE_ON_TIME = 10;
-  const STATUS_CODE_LATE_AIRLINE = 20;
-  const STATUS_CODE_LATE_WEATHER = 30;
-  const STATUS_CODE_LATE_TECHNICAL = 40;
-  const STATUS_CODE_LATE_OTHER = 50;
+  
 
   const oracles = [];
 
   
-  contract('Flight Surety Tests', async (accounts) => {
+  contract('Oracles', async (accounts) => {
+    const TEST_ORACLES_COUNT = 20;
     var config;
-    var accounts;
+    // var accounts;
 
     before('setup contract', async () => {
     config = await Test.Config(accounts);
+
+    // Watch contract events
+    const STATUS_CODE_UNKNOWN = 0;
+    const STATUS_CODE_ON_TIME = 10;
+    const STATUS_CODE_LATE_AIRLINE = 20;
+    const STATUS_CODE_LATE_WEATHER = 30;
+    const STATUS_CODE_LATE_TECHNICAL = 40;
+    const STATUS_CODE_LATE_OTHER = 50;
     });
 
     
@@ -38,7 +40,7 @@ const BigNumber = require('bignumber.js');
   it('can register oracles', async () => {
     
     // ARRANGE
-    // const fee = await config.flightSuretyApp.REGISTRATION_FEE.call({ from: accounts[1] });
+    const fee = await config.flightSuretyApp.REGISTRATION_FEE.call({ from: accounts[1] });
 
     // ACT
     for(let a = 1; a < TEST_ORACLES_COUNT; a++) {      
