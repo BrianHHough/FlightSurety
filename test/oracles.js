@@ -2,14 +2,14 @@ const Test = require('../config/testConfig.js');
 // const truffleAssert = require('truffle-assertions');
 const BigNumber = require('bignumber.js');
 
-let config;
+// let config;
 let accounts;
 
   const TEST_ORACLES_COUNT = 20;
-  /* var config;
+  var config;
   before('setup contract', async () => {
     config = await Test.Config(accounts);
-  */
+  
     // Watch contract events
     const STATUS_CODE_UNKNOWN = 0;
     const STATUS_CODE_ON_TIME = 10;
@@ -126,3 +126,4 @@ before(async () => {
 
 */
   });
+});
