@@ -63,7 +63,7 @@ const BigNumber = require('bignumber.js');
   it('can request flight status', async () => {
     
     // ARRANGE
-    // const airline = config.firstAirline;
+    const airline = config.firstAirline;
     let flight = 'ND1309'; // Course number
     let timestamp = Math.floor(Date.now() / 1000);
 
