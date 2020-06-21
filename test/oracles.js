@@ -3,29 +3,36 @@ const Test = require('../config/testConfig.js');
 const BigNumber = require('bignumber.js');
 
 // let config;
-let accounts;
+// var accounts;
 
   const TEST_ORACLES_COUNT = 20;
-  var config;
-  before('setup contract', async () => {
-    config = await Test.Config(accounts);
-  
-    // Watch contract events
-    const STATUS_CODE_UNKNOWN = 0;
-    const STATUS_CODE_ON_TIME = 10;
-    const STATUS_CODE_LATE_AIRLINE = 20;
-    const STATUS_CODE_LATE_WEATHER = 30;
-    const STATUS_CODE_LATE_TECHNICAL = 40;
-    const STATUS_CODE_LATE_OTHER = 50;
+  // Watch contract events
+  const STATUS_CODE_UNKNOWN = 0;
+  const STATUS_CODE_ON_TIME = 10;
+  const STATUS_CODE_LATE_AIRLINE = 20;
+  const STATUS_CODE_LATE_WEATHER = 30;
+  const STATUS_CODE_LATE_TECHNICAL = 40;
+  const STATUS_CODE_LATE_OTHER = 50;
 
-    const oracles = [];
+  const oracles = [];
+
+  
+  contract('Flight Surety Tests', async (accounts) => {
+    var config;
+    var accounts;
+
+    before('setup contract', async () => {
+    config = await Test.Config(accounts);
+    });
+
+    
 
 // contract('Oracles', async (accounts) => {
 //   });
 
-before(async () => {
+// before(async () => {
   // config = await Test.Config(accounts);
-});
+
 
 // TEST 1
   it('can register oracles', async () => {
