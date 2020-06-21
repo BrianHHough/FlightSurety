@@ -19,13 +19,14 @@
  */
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
-const HDWalletProvider = require("truffle-hdwallet-provider");
+var HDWalletProvider = require("truffle-hdwallet-provider");
+// const HDWalletProvider = require("truffle-hdwallet-provider");
 // const infuraKey = "fj4jll3k.....";
 //
-
-const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
-
+var mnemonic = "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
+//const fs = require('fs');
+// var mnemonic = fs.readFileSync(".secret").toString().trim();
+var NonceTrackerSubprovider = require("web3-provider-engine/subproviders/nonce-tracker")
 
 module.exports = {
   /**
@@ -46,15 +47,30 @@ module.exports = {
     // options below to some value.
     //
     development: {
-      provider: function() {
-        return new HDWalletProvider(mnemonic, "http://127.0.0.1:8545/", 0, 50);
-      },
+      // provider: function() {
+        host: "127.0.0.1",
+        port: 8545,
+        //return new HDWalletProvider(mnemonic, "http://127.0.0.1:8545/", 0, 50);
+      
       // host: "127.0.0.1",     // Localhost (default: none)
       // port: 9545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
       accounts: 50           // Establish 50 accounts in the dev network as recommended
     },
-
+    // Add Rinkeby test net to module.exports
+      rinkeby: {
+        provider: function () {
+          var wallet = new HDWalletProvider(MNEMONIC, ENDPOINT)
+          var nonceTracker = new NonceTrackerSubprovider()
+          wallet.engine._providers.unshift(nonceTracker)
+          nonceTracker.setEngine(wallet.engine)
+          return wallet
+      },
+      network_id: 4,
+      // gas: 2000000, // <--- 2x as much
+      // gasPrice: 10000000000,
+    }
+  },
     // Another network with more advanced options...
     // advanced: {
       // port: 8777,             // Custom port
@@ -82,17 +98,16 @@ module.exports = {
       // network_id: 2111,   // This network is yours, in the cloud.
       // production: true    // Treats this network as if it was a public net. (default: false)
     // }
-  },
 
   // Set default mocha options here, use special reporters etc.
-  mocha: {
+  // mocha: {
     // timeout: 100000
-  },
+  // },
 
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.4.25",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.4.24",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
@@ -103,4 +118,4 @@ module.exports = {
       // }
     }
   }
-}
+};
