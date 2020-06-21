@@ -151,6 +151,8 @@ contract FlightSuretyApp {
         }
 
 
+
+
     /**
     * @dev Register a future flight for insuring.
     *
@@ -533,7 +535,6 @@ function withdrawBalance() external
         }
     }
 
-
     function getFlightKey(
         address airline,
         string flight,
@@ -587,17 +588,28 @@ function withdrawBalance() external
         return random;
     }
 
-}
 
 /********************************************************************************************/
 /*                                 END REGION - DATA CONTRACT                               */
 /********************************************************************************************/
 
+// FlightSuretyData encapsulations functions
+/*
+function isAirline(address airline) external view returns(bool){
+        return FlightSuretyData.isAirline(airline);
+    }
+*/
+}
+
+
+
+
 // Note: added in "external" to the external view components below to avoid error: "security/enforce-explicit-visibility: No visibility specified explicitly for getAirlineState function."
 
 /*
 contract FlightSuretyData {
-    function getAirlineState(address airline) public
+
+function getAirlineState(address airline) public
     returns(uint)
     {
         return 1;
