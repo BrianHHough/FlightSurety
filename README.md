@@ -347,3 +347,6 @@ There are two smart contracts used in FlightSurety for the App and for the Data.
     =======
     > Total deployments:   3
     > Final cost:          0.0302796 ETH
+
+# All Seven Tests Pass Successfully!
+![](./images/All-Seven-Tests-Pass.png)

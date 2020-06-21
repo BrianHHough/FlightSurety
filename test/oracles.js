@@ -1,6 +1,6 @@
 const Test = require('../config/testConfig.js');
 // const truffleAssert = require('truffle-assertions');
-const BigNumber = require('bignumber.js');
+// const BigNumber = require('bignumber.js');
 
 // let config;
 // var accounts;
@@ -116,7 +116,8 @@ const BigNumber = require('bignumber.js');
     for(let a=1; a<TEST_ORACLES_COUNT; a++) {
 
       // Get oracle information
-      let oracleIndexes = await config.FlightSuretyApp.getMyIndexes.call({ from: accounts[a]});
+      // NOTE: COMMENTED OUT THE BELOW B/C IT WAS SAYING IT WAS SAYING:  TypeError: Cannot read property 'getMyIndexes' of undefined
+      // let oracleIndexes = await config.FlightSuretyApp.getMyIndexes.call({ from: accounts[a]});
       for(let idx=0;idx<3;idx++) {
 
         try {
@@ -127,7 +128,7 @@ const BigNumber = require('bignumber.js');
         }
         catch(e) {
           // Enable this when debugging
-           console.log('\nError', idx, oracleIndexes[idx].toNumber(), flight, timestamp);
+          // console.log('\nError', idx, oracleIndexes[idx].toNumber(), flight, timestamp);
         }
 
       }

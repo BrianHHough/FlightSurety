@@ -16,13 +16,51 @@ contract FlightSuretyData {
     bool private operational = true;
     // Add mapping like in FlightSuretyApp.sol
     // mapping(address => bool) private authorizedCallers;
+    struct Flight {
+        string flightName;
+        address airline;
+        uint8 statusCode;
+        uint256 timestamp;
+    }
+    struct Airline {
+        bool isRegistered;      // Flag for testing existence in mapping
+        address account;        // Ethereum account
+        uint256 ownership;      // Track percentage of Smart Contract ownership based on initial contribution
+    }
 
+    struct Insurance {
+        address passenger;
+        uint256 insuranceAmount;
+    }
 
+    mapping(address => uint8) authorizedCaller;
+    mapping(address => Airline) airlines;   // All registered airlines
+    mapping(string => Flight) flights;
+    mapping(string => address[]) flightInsurees;
+    mapping(address => uint256) funds;
+    mapping(bytes32 => uint256) flightSurety;
 
 /********************************************************************************************/
 /*  EVENT DEFINITIONS                  */
 /********************************************************************************************/
 
+    event AuthorizedCaller(address caller);
+    event DeAuthorizedCaller(address caller);
+    event CreditInsured(address passenger, string flight, uint256 amount);
+    event RegisterAirline   // Event fired when a new Airline is registered
+    (
+        address indexed account     // "indexed" keyword indicates that the data should be
+    // stored as a "topic" in event log data. This makes it
+    // searchable by event log filters. A maximum of three
+    // parameters may use the indexed keyword per event.
+    );
+    event RegisterFlight   // Event fired when a new Airline is registered
+    (
+        string indexed account     // "indexed" keyword indicates that the data should be
+    // stored as a "topic" in event log data. This makes it
+    // searchable by event log filters. A maximum of three
+    // parameters may use the indexed keyword per event.
+    );
     /**
     * @dev Constructor
     *      The deploying account becomes contractOwner
@@ -36,6 +74,7 @@ contract FlightSuretyData {
         // totalPaidAirlines++;
     }
 
+    
 
 
 
@@ -51,6 +90,8 @@ contract FlightSuretyData {
     *      This is used on all state changing functions to pause the contract in
     *      the event there is an issue that needs to be fixed
     */
+
+
     modifier requireIsOperational() {
         require(operational, "Contract is currently not operational");
         _;  // All modifiers require an "_" which indicates where the function body will be added

@@ -12,7 +12,7 @@
 <body>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#">FlightSurety</a>
+        <a class="navbar-brand" href="#">FlightSurety dApp</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,7 +24,21 @@
         <div id="display-wrapper" class="top-20">
         </div>
         <div class="row top-20">
-            <label class="form">Flight</label> <input type="text" id="flight-number"> <btn class="btn btn-primary" id="submit-oracle">Submit to Oracles</btn>
+            <label>
+                Flights <select id="flights-selector">
+                </select>
+            </label>
+            <label class="form">Pick Here</label> <input type="text" id="flight-number"> <btn class="btn btn-primary" id="submit-oracle">Submit to Oracles</btn>
+            <div style="flex: 1;">
+                <label style="display: flex; flex-direction: column">
+                Amount (in ETH)
+                <input style="margin-left: 7px" id="valueStep" type="number" min="0" max="1" step="0.1">
+            </label>
+            <button style="margin-left: 7px" class="btn btn-primary" id="buyInsurance">Buy Insurance (and win big!)</button>    
+            </div>
+            <div style="display: none;">
+            <label class="form">Flight</label>l<input type="text" id="flight-number">
+            </div>
         </div>
     </main>
 
