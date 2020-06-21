@@ -706,4 +706,3 @@ function getAirlineState(address airline) public
             );
             flightsKeyList.push(flightKey3);
 */
-

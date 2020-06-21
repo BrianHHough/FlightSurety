@@ -17,6 +17,8 @@ contract FlightSuretyData {
     // Add mapping like in FlightSuretyApp.sol
     // mapping(address => bool) private authorizedCallers;
 
+
+
 /********************************************************************************************/
 /*  EVENT DEFINITIONS                  */
 /********************************************************************************************/
@@ -83,12 +85,10 @@ contract FlightSuretyData {
     * @dev This function turns the contract operations on or off
     */
     function setOperatingStatus(
-        bool mode,
-        address sender)
+        bool mode)
         external requireContractOwner {
         // If opertional mode is disabled, all write transactions except this one here will fail when run and not work...
-        require(mode != operational, "This new mode can't be the same as an existing mode");
-        // require(airlines[sender].isRegistered,"This caller isn't a registered one");
+        operational = mode;
     }
 
 
