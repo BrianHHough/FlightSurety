@@ -42,7 +42,15 @@ import './flightsurety.css';
             
             display('Operational Status', 'Check if contract is operational', [ { label: 'Operational Status', error: error, value: result} ]);
         });
-    
+        
+        // Register flights (esp. a new one) - modeled after the one below to act similarly
+        DOM.elid('register-flight').addEventListener('click', () => {
+            let flight = DOM.elid('flight-number').value;
+            // Write transaction
+            contract.registerFlight(flight, (error, result) => {
+                display('Flights', 'Register Flight', [ { label: 'Registered Flight', error: error, value: result.flight + ' ' + result.timestamp} ]);
+            });
+        })
 
         // User-submitted transaction
         DOM.elid('submit-oracle').addEventListener('click', () => {
@@ -50,6 +58,24 @@ import './flightsurety.css';
             // Write transaction
             contract.fetchFlightStatus(flight, (error, result) => {
                 display('Oracles', 'Trigger oracles', [ { label: 'Fetch Flight Status', error: error, value: result.flight + ' ' + result.timestamp} ]);
+            });
+        })
+
+        // Buy insurance - modeled after the one above to act similarly
+        DOM.elid('buy-insurance').addEventListener('click', () => {
+            let insuranceValue = DOM.elid('insurance-value').value;
+            // Write transaction
+            contract.buyInsurance(flight, insuranceValue, (error, result) => {
+                display('Passenger', 'Buy insurance', [ { label: 'Transaction good', error: error, value: result} ]);
+            });
+        })
+
+        // Withdraw Credits - modeled after the one above to act similarly
+        DOM.elid('withdraw-credits').addEventListener('click', () => {
+            // let insuranceValue = DOM.elid('insurance-value').value;
+            // Write transaction
+            contract.withdrawCredits((error, result) => {
+                display('Passenger', 'Withdraw your creidts', [ { label: 'Transaction good', error: error, value: result} ]);
             });
         })
     
